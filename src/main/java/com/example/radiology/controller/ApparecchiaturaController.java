@@ -4,7 +4,7 @@ import com.example.radiology.entity.Apparecchiatura;
 import com.example.radiology.entity.Organizzazione;
 import com.example.radiology.repository.ApparecchiaturaRepository;
 import com.example.radiology.repository.OrganizzazioneRepository;
-import io.quarkus.security.Authenticated;
+import com.example.radiology.security.VerificaAzienda;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
@@ -16,6 +16,7 @@ import java.util.Map;
 @Path("/api")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
+@VerificaAzienda("Azienda A")
 public class ApparecchiaturaController {
 
     private final OrganizzazioneRepository organizzazioneRepository;
@@ -30,14 +31,12 @@ public class ApparecchiaturaController {
 
     @GET
     @Path("/organizzazioni")
-    @Authenticated
     public List<Organizzazione> getAllOrganizations() {
         return organizzazioneRepository.findAll();
     }
 
     @GET
     @Path("/organizzazioni/{id}/tree")
-    @Authenticated
     public Organizzazione tree(@PathParam("id") Long id) {
         return organizzazioneRepository.findById(id)
                 .orElseThrow(() -> new WebApplicationException("Organizzazione non trovata con id: " + id, 404));

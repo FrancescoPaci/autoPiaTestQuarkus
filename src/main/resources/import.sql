@@ -1,7 +1,11 @@
 INSERT INTO utenti (username, password, azienda, ruoli, attivo)
-VALUES ('admin', '$2a$10$qpPWvjFZMBlUWUERj0imMue6bvhhPLC3n7dzceoSOrhEmpoKoDglW', 'Azienda Demo', 'ADMIN,USER', true);
+VALUES ('user', '$2a$10$rypPP2rdtkFYGtNOlsb9x.M6lG1DEUOjVlBCSUNw0XWt7MVTs.pIS', 'Azienda A', 'USER', true);
 INSERT INTO utenti (username, password, azienda, ruoli, attivo)
-VALUES ('user', '$2a$10$rypPP2rdtkFYGtNOlsb9x.M6lG1DEUOjVlBCSUNw0XWt7MVTs.pIS', 'Azienda Demo', 'USER', true);
+VALUES ('admin', '$2a$10$qpPWvjFZMBlUWUERj0imMue6bvhhPLC3n7dzceoSOrhEmpoKoDglW', 'Azienda A', 'ADMIN', true);
+INSERT INTO utenti (username, password, azienda, ruoli, attivo)
+VALUES ('user2', '$2a$10$rypPP2rdtkFYGtNOlsb9x.M6lG1DEUOjVlBCSUNw0XWt7MVTs.pIS', 'Azienda B', 'USER', true);
+INSERT INTO utenti (username, password, azienda, ruoli, attivo)
+VALUES ('admin2', '$2a$10$qpPWvjFZMBlUWUERj0imMue6bvhhPLC3n7dzceoSOrhEmpoKoDglW', 'Azienda B', 'ADMIN', true);
 
 -- 1. INSERIMENTO ORGANIZZAZIONI
 INSERT INTO organizzazione (id, nome)

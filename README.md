@@ -13,4 +13,12 @@ per il FE
 
 apri il browser e naviga su: http://localhost:4200/
 
+Si possono usere 4 utenze: 
+    - azienda A può vedere tutto ma solo l'admin può creare un'apparecchiatura
+        user - psw: user (azienda A)
+        admin - psw: admin (azienda A)
+    - azienda B non può vedere nulla né fare nulla
+        user2 - psw: user (azienda B)
+        admin2 - psw: admin (azienda B)
+
 buona visione :)

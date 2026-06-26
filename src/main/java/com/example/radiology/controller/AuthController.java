@@ -52,7 +52,7 @@ public class AuthController {
                                 .collect(java.util.stream.Collectors.toSet());
 
                         // Generiamo il vero JWT token firmato compatibile con Quarkus
-                        String realJwtToken = jwtService.generateToken(utente.getUsername(), roles);
+                        String realJwtToken = jwtService.generateToken(utente);
 
                         return Response.ok(Map.of(
                                 "token", realJwtToken,
