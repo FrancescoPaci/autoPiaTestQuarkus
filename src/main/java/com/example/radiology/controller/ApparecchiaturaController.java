@@ -5,6 +5,7 @@ import com.example.radiology.entity.Organizzazione;
 import com.example.radiology.repository.ApparecchiaturaRepository;
 import com.example.radiology.repository.OrganizzazioneRepository;
 import com.example.radiology.security.VerificaAzienda;
+import io.quarkus.security.Authenticated;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
@@ -31,12 +32,14 @@ public class ApparecchiaturaController {
 
     @GET
     @Path("/organizzazioni")
+    @Authenticated
     public List<Organizzazione> getAllOrganizations() {
         return organizzazioneRepository.findAll();
     }
 
     @GET
     @Path("/organizzazioni/{id}/tree")
+    @Authenticated
     public Organizzazione tree(@PathParam("id") Long id) {
         return organizzazioneRepository.findById(id)
                 .orElseThrow(() -> new WebApplicationException("Organizzazione non trovata con id: " + id, 404));
