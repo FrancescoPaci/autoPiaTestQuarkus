@@ -7,6 +7,8 @@ import com.example.radiology.repository.OrganizzazioneRepository;
 import io.quarkus.test.InjectMock;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.security.TestSecurity;
+import io.quarkus.test.security.jwt.Claim;
+import io.quarkus.test.security.jwt.JwtSecurity;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -28,6 +30,9 @@ class ApparecchiaturaControllerTest {
 
     @Test
     @TestSecurity(user = "user", roles = "USER")
+    @JwtSecurity(claims = {
+            @Claim(key = "azienda", value = "Azienda A")
+    })
     void testGetAllOrganizations_Success() {
         Organizzazione org1 = Organizzazione.builder().id(1L).nome("Ospedale San Raffaele").build();
         Organizzazione org2 = Organizzazione.builder().id(2L).nome("Clinica Diagnostica Avanzata").build();
@@ -47,6 +52,9 @@ class ApparecchiaturaControllerTest {
 
     @Test
     @TestSecurity(user = "user", roles = "USER")
+    @JwtSecurity(claims = {
+            @Claim(key = "azienda", value = "Azienda A")
+    })
     void testGetOrganizationTree_Success() {
         Organizzazione org = Organizzazione.builder().id(10L).nome("Clinica Centrale").build();
 
@@ -64,6 +72,9 @@ class ApparecchiaturaControllerTest {
 
     @Test
     @TestSecurity(user = "admin", roles = "ADMIN")
+    @JwtSecurity(claims = {
+            @Claim(key = "azienda", value = "Azienda A")
+    })
     void testCreateApparecchiatura_Success() {
         Apparecchiatura app = Apparecchiatura.builder()
                 .nome("TAC Generale")
@@ -85,6 +96,9 @@ class ApparecchiaturaControllerTest {
 
     @Test
     @TestSecurity(user = "user", roles = "USER")
+    @JwtSecurity(claims = {
+            @Claim(key = "azienda", value = "Azienda A")
+    })
     void testCreateApparecchiatura_ShouldFail_WhenUserIsNotAdmin() {
         Apparecchiatura app = Apparecchiatura.builder()
                 .nome("TAC Generale")
