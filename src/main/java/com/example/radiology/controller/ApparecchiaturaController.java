@@ -8,6 +8,7 @@ import com.example.radiology.security.VerificaAzienda;
 import io.quarkus.security.Authenticated;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 
@@ -34,22 +35,26 @@ public class ApparecchiaturaController {
     @Path("/organizzazioni")
     @Authenticated
     public List<Organizzazione> getAllOrganizations() {
-        return organizzazioneRepository.findAll();
+        return organizzazioneRepository.listAll();
     }
 
     @GET
     @Path("/organizzazioni/{id}/tree")
     @Authenticated
     public Organizzazione tree(@PathParam("id") Long id) {
-        return organizzazioneRepository.findById(id)
-                .orElseThrow(() -> new WebApplicationException("Organizzazione non trovata con id: " + id, 404));
+        Organizzazione org = organizzazioneRepository.findById(id);
+        if (org == null) {
+            throw new WebApplicationException("Organizzazione non trovata con id: " + id, 404);
+        }
+        return org;
     }
 
     @POST
     @Path("/apparecchiatura")
     @RolesAllowed("ADMIN")
+    @Transactional
     public Map<String, String> create(Apparecchiatura apparecchiatura) {
-        apparecchiaturaRepository.save(apparecchiatura);
+        apparecchiaturaRepository.persist(apparecchiatura);
         return Map.of("status", "created");
     }
 

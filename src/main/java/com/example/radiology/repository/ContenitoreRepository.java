@@ -1,7 +1,9 @@
 package com.example.radiology.repository;
 
 import com.example.radiology.entity.Contenitore;
-import org.springframework.data.jpa.repository.JpaRepository;
+import io.quarkus.hibernate.orm.panache.PanacheRepository;
+import jakarta.enterprise.context.ApplicationScoped;
 
-public interface ContenitoreRepository extends JpaRepository<Contenitore, Long> {
+@ApplicationScoped
+public class ContenitoreRepository implements PanacheRepository<Contenitore> {
 }

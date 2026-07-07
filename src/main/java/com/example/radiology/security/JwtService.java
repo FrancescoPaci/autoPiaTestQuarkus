@@ -9,11 +9,7 @@ import java.util.Set;
 @ApplicationScoped
 public class JwtService {
 
-    public String generateToken(Utente utente) {
-
-        Set<String> roles = java.util.Arrays.stream(utente.getRuoli().split(","))
-                .map(String::trim)
-                .collect(java.util.stream.Collectors.toSet());
+    public String generateToken(Utente utente, Set<String> roles) {
 
         return Jwt.issuer("http://localhost:8080")
                 .upn(utente.getUsername())

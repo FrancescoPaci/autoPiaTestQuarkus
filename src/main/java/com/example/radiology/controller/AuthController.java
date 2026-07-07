@@ -1,5 +1,6 @@
 package com.example.radiology.controller;
 
+import com.example.radiology.entity.Utente;
 import com.example.radiology.repository.UtenteRepository;
 import com.example.radiology.security.JwtService;
 import jakarta.annotation.security.PermitAll;
@@ -39,33 +40,30 @@ public class AuthController {
     public Response login(Map<String, String> loginRequest) {
         String username = loginRequest.get("username");
         String password = loginRequest.get("password");
+        System.out.println(">>> STO USANDO UN VIRTUAL THREAD? " + Thread.currentThread().isVirtual());
+        // 1. Cerca l'utente nel DB (ora restituisce direttamente l'entità o null)
+        Utente utente = utenteRepository.findByUsername(username);
 
-        // 1. Cerca l'utente nel DB
-        return utenteRepository.findByUsername(username)
-                .map(utente -> {
+        // 2. Verifica se l'utente è attivo e se la password inserita coincide con l'hash BCrypt
+        if (utente != null && utente.getAttivo() && passwordEncoder.matches(password, utente.getPassword().trim())) {
 
-                    // 2. Verifica se l'utente è attivo e se la password inserita coincide con l'hash BCrypt
-                    if (utente.getAttivo() && passwordEncoder.matches(password, utente.getPassword().trim())) {
+            Set<String> roles = java.util.Arrays.stream(utente.getRuoli().split(","))
+                    .map(String::trim)
+                    .collect(java.util.stream.Collectors.toSet());
 
-                        Set<String> roles = java.util.Arrays.stream(utente.getRuoli().split(","))
-                                .map(String::trim)
-                                .collect(java.util.stream.Collectors.toSet());
+            // Generiamo il vero JWT token firmato compatibile con Quarkus
+            String realJwtToken = jwtService.generateToken(utente, roles);
 
-                        // Generiamo il vero JWT token firmato compatibile con Quarkus
-                        String realJwtToken = jwtService.generateToken(utente);
+            return Response.ok(Map.of(
+                    "token", realJwtToken,
+                    "roles", roles
+            )).build();
+        }
 
-                        return Response.ok(Map.of(
-                                "token", realJwtToken,
-                                "roles", roles
-                        )).build();
-                    }
-                    return Response.status(Response.Status.UNAUTHORIZED)
-                            .entity(Map.of("error", "Credenziali non valide"))
-                            .build();
-                })
-                .orElse(Response.status(Response.Status.UNAUTHORIZED)
-                        .entity(Map.of("error", "Utente non trovato"))
-                        .build());
+        // Se le credenziali o lo stato attivo non sono validi
+        return Response.status(Response.Status.UNAUTHORIZED)
+                .entity(Map.of("error", "Credenziali non valide"))
+                .build();
     }
 
 }

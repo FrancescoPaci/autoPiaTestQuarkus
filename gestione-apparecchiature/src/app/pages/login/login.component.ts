@@ -14,13 +14,13 @@ export class LoginComponent {
   username = '';
   password = '';
 
-  // Ora sia AuthService che Router sono tipizzati correttamente
   constructor(
     private auth: AuthService,
     private router: Router
   ) {}
 
   login() {
+    localStorage.removeItem('token');
     this.auth.login(this.username, this.password).subscribe({
       next: (response) => {
         console.log('Login effettuato con successo!', response);

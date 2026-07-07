@@ -15,8 +15,7 @@ export class CreaAttrezzaturaComponent {
   organizations = input<any>(null);
   private http = inject(HttpClient);
 
-  // 🚀 Il tuo oggetto inizializzato pronto a raccogliere i dati del form
-attrezzatura: Apparecchiatura = {
+  attrezzatura: Apparecchiatura = {
     nome: '',
     tipologia: '',
     numeroSerie: '',
@@ -25,34 +24,29 @@ attrezzatura: Apparecchiatura = {
     contenitore: null
   };
 
-  // Signals per la gestione degli stati grafici (esclusione e disabilitazione)
   selectedOrganizationId = signal<number | null>(null);
   selectedContainerId = signal<number | null>(null);
 
   isOrganizationDisabled = computed(() => this.selectedContainerId() !== null);
   isContainerDisabled = computed(() => this.selectedOrganizationId() !== null);
 
-// Sincronizzazione al cambio dell'organizzazione
   onOrganizationChange(value: any) {
-    const id = (value === 'null' || value === null) ? null : Number(value);
-
-    this.attrezzatura.organizzazione = id ? { id: id } : null;
-
-    if (id !== null) {
+    const id = Number(value)
+    if (Number.isInteger(id)) {
+      this.attrezzatura.organizzazione = id ? { id: id } : null;
+    } else {
       this.selectedContainerId.set(null);
-      this.attrezzatura.contenitore = null; // Svuota il contenitore alternativo
+      this.attrezzatura.contenitore = null;
     }
   }
 
-  // Sincronizzazione al cambio del contenitore
   onContainerChange(value: any) {
-    const id = (value === 'null' || value === null) ? null : Number(value);
-
-    this.attrezzatura.contenitore = id ? { id: id } : null;
-
-    if (id !== null) {
+    const id = Number(value)
+    if (Number.isInteger(id)) {
+      this.attrezzatura.contenitore = id ? { id: id } : null;
+    } else {
       this.selectedOrganizationId.set(null);
-      this.attrezzatura.organizzazione = null; // Svuota l'organizzazione alternativa
+      this.attrezzatura.organizzazione = null;
     }
   }
 

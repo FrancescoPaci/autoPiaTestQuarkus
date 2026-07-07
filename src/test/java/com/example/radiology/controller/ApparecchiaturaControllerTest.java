@@ -14,7 +14,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import java.util.List;
-import java.util.Optional;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
@@ -37,7 +36,7 @@ class ApparecchiaturaControllerTest {
         Organizzazione org1 = Organizzazione.builder().id(1L).nome("Ospedale San Raffaele").build();
         Organizzazione org2 = Organizzazione.builder().id(2L).nome("Clinica Diagnostica Avanzata").build();
 
-        Mockito.when(organizzazioneRepository.findAll()).thenReturn(List.of(org1, org2));
+        Mockito.when(organizzazioneRepository.listAll()).thenReturn(List.of(org1, org2));
 
         given()
                 .contentType(ContentType.JSON)
@@ -58,7 +57,7 @@ class ApparecchiaturaControllerTest {
     void testGetOrganizationTree_Success() {
         Organizzazione org = Organizzazione.builder().id(10L).nome("Clinica Centrale").build();
 
-        Mockito.when(organizzazioneRepository.findById(10L)).thenReturn(Optional.of(org));
+        Mockito.when(organizzazioneRepository.findById(10L)).thenReturn(org);
 
         given()
                 .contentType(ContentType.JSON)
@@ -82,7 +81,7 @@ class ApparecchiaturaControllerTest {
                 .numeroSerie("SN-123456")
                 .build();
 
-        Mockito.when(apparecchiaturaRepository.save(Mockito.any(Apparecchiatura.class))).thenReturn(app);
+        Mockito.doNothing().when(apparecchiaturaRepository).persist(Mockito.any(Apparecchiatura.class));
 
         given()
                 .contentType(ContentType.JSON)
@@ -114,5 +113,4 @@ class ApparecchiaturaControllerTest {
                 .then()
                 .statusCode(403); // Aspettato 403 Forbidden perché non è ADMIN
     }
-
 }
