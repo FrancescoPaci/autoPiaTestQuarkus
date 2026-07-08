@@ -1,7 +1,7 @@
 @if (organizations()) {
 <div class="form-container">
 
-  <form (ngSubmit)="salva()" #apparecchiaturaForm="ngForm">
+  <form (ngSubmit)="save()" #apparecchiaturaForm="ngForm">
 
     <table class="table table-bordered">
       <tbody>
@@ -72,7 +72,7 @@
             (ngModelChange)="onOrganizationChange($event)">
 
             <option [ngValue]="null">Seleziona un'organizzazione...</option>
-            @for (org of listaOrganizations(); track org.id) {
+            @for (org of organizations(); track org.id) {
             <option [value]="org.id">{{ org.nome }}</option>
             }
           </select>

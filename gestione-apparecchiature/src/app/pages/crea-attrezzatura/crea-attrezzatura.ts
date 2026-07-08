@@ -50,7 +50,7 @@ export class CreaAttrezzaturaComponent {
     }
   }
 
-  salva() {
+  save() {
     this.http.post<any>(`http://localhost:8080/api/apparecchiatura`, this.attrezzatura)
       .subscribe({
         next: (res) => {
@@ -76,17 +76,9 @@ export class CreaAttrezzaturaComponent {
       organizzazione: null,
       contenitore: null
     };
-
     this.selectedOrganizationId.set(null);
     this.selectedContainerId.set(null);
   }
-
-  // --- Data Sourcing ---
-  listaOrganizations = computed(() => {
-    const orgs = this.organizations();
-    if (!orgs || !Array.isArray(orgs)) return [];
-    return orgs.map((org: any) => ({ id: org.id, nome: org.nome }));
-  });
 
   listaContenitori = computed(() => {
     const orgs = this.organizations();
@@ -95,4 +87,5 @@ export class CreaAttrezzaturaComponent {
       .flatMap((org: any) => org.contenitori || [])
       .map((cont: any) => ({ id: cont.id, nome: cont.nome }));
   });
+
 }
